@@ -1,0 +1,3 @@
+page_title: "My Custom Apache Server"
+page_heading: "Welcome to My Website!"
+page_message: "This page is served by Apache and managed by Ansible."

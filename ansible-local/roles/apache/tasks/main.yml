@@ -1,0 +1,44 @@
+- name: Install Apache2 package
+  apt:
+    name: apache2
+    state: present
+    update_cache: yes
+  tags: apache
+
+- name: Ensure Apache is started and enabled
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+  tags: apache
+
+- name: Copy a custom index.html from template
+  template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    mode: '0644'
+  notify: Restart Apache
+  tags: apache
+
+- name: Allow Apache through firewall
+  ufw:
+    rule: allow
+    name: 'Apache'
+    state: enabled
+  tags: apache
+
+- name: Configure custom document root for Apache
+  lineinfile:
+    path: /etc/apache2/sites-available/000-default.conf
+    regexp: '^\s*DocumentRoot'
+    line: 'DocumentRoot /var/www/my_custom_directory'
+  notify: Restart Apache
+  tags: apache
+
+- name: Create a custom directory for the document root
+  file:
+    path: /var/www/my_custom_directory
+    state: directory
+    mode: '0755'
+  tags: apache
+

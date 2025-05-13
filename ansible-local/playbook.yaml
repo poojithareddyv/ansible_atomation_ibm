@@ -1,0 +1,7 @@
+- name: Configure Apache using Role
+  hosts: webservers
+  become: yes
+
+  roles:
+    - apache
+
